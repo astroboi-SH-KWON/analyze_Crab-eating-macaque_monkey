@@ -23,6 +23,7 @@ gRNA_LEN = 20
 PAM_SEQ = "NGG"
 BACK_WIN_LEN = 20
 
+EXCEPTION_CHR_LIST = ['MT', 'KE']
 INIT_DEEP_PE = [PAM_SEQ, FRONT_WIN_LEN, gRNA_LEN, BACK_WIN_LEN]
 FILE_NUM_LIST = ['X']
 ############### end setting env ################
@@ -31,41 +32,19 @@ def test():
     logic = Logic.Logics()
     util = Util.Utils()
 
-    tmp_dict = logic.get_Deep_PE_input(REF_PATH + CDS_FILE, INIT_DEEP_PE)
-
-    util.make_Deep_PE_input_excel(WORK_DIR, tmp_dict, INIT_DEEP_PE)
 
 
 
-def test2():
-    tmp_dict = {}
 
-    for idx in range(1, 20):
-        FILE_NUM_LIST.append(str(idx))
 
-    for seq_record in SeqIO.parse(REF_PATH + CDS_FILE, "fasta"):
-
-        dscript = seq_record.description
-        chrsm = dscript[dscript.index(":Macaca_fascicularis_5.0:") + len(":Macaca_fascicularis_5.0:"):].split(":")[0]
-
-        if chrsm not in tmp_dict:
-            tmp_dict.update({chrsm: seq_record.seq})
-    with open(WORK_DIR + "exception_list.txt","a") as f:
-
-        for chrsm_key, val in tmp_dict.items():
-            if chrsm_key in FILE_NUM_LIST:
-                continue
-            f.writelines(str(chrsm_key) + "\n")
-            f.writelines(str(val) + "\n")
-            f.writelines(" \n")
 
 
 
 
 start_time = clock()
 print("start >>>>>>>>>>>>>>>>>>")
-# test()
-test2()
+test()
+# test2()
 print("::::::::::: %.2f seconds ::::::::::::::" % (clock() - start_time))
 
 

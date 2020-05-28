@@ -81,3 +81,38 @@ class Logics:
                             tmp_dict[trncrpt_id].append(tmp_p_str)
 
         return tmp_dict
+
+    def filter_out_by_chrm(self, chrsm, ignore_chrm_list):
+        for tmp_expt_str in ignore_chrm_list:
+            if tmp_expt_str in chrsm:
+                return True
+        return False
+
+    def group_by_chromosome(self, data_dict, deli_str, ignore_chrm_list):
+        result_dict = {}
+        aqia_dict = {}
+        for trnscrpt_id, vals_arr in data_dict.items():
+            dscript = vals_arr[0]
+            chrsm = dscript[dscript.index(deli_str) + len(deli_str):].split(":")[0]
+
+            if self.filter_out_by_chrm(chrsm, ignore_chrm_list):
+                continue
+
+            if 'AQIA' in chrsm:
+                if chrsm in aqia_dict:
+                    if trnscrpt_id not in aqia_dict[chrsm]:
+                        aqia_dict[chrsm].update({trnscrpt_id: vals_arr})
+                else:
+                    aqia_dict.update({chrsm: {trnscrpt_id: vals_arr}})
+                continue
+
+
+            if chrsm in result_dict:
+                if trnscrpt_id not in result_dict[chrsm]:
+                    result_dict[chrsm].update({trnscrpt_id: vals_arr})
+            else:
+                result_dict.update({chrsm:{trnscrpt_id: vals_arr}})
+
+        return result_dict, aqia_dict
+
+

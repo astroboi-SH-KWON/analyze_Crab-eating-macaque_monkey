@@ -25,6 +25,7 @@ MUT_FILE = "Mutation_summary"
 WINDOW_SIZE = 1
 MAX_SEQ_LEN = 9
 
+FILE_NUM_LIST = ['X']
 # INITIAL_MAIN = [CHR_PATH, MAX_SEQ_LEN, WINDOW_SIZE]
 ############### end setting env ################
 
@@ -81,6 +82,28 @@ def read_FASTA_all_at_once():
         # idx += 1
         # if idx == 10:
         #     break
+
+def test2():
+    tmp_dict = {}
+
+    for idx in range(1, 20):
+        FILE_NUM_LIST.append(str(idx))
+
+    for seq_record in SeqIO.parse(REF_PATH + CDS_FILE, "fasta"):
+
+        dscript = seq_record.description
+        chrsm = dscript[dscript.index(":Macaca_fascicularis_5.0:") + len(":Macaca_fascicularis_5.0:"):].split(":")[0]
+
+        if chrsm not in tmp_dict:
+            tmp_dict.update({chrsm: seq_record.seq})
+    with open(WORK_DIR + "exception_list.txt","a") as f:
+
+        for chrsm_key, val in tmp_dict.items():
+            if chrsm_key in FILE_NUM_LIST:
+                continue
+            f.writelines(str(chrsm_key) + "\n")
+            f.writelines(str(val) + "\n")
+            f.writelines(" \n")
 
 def read_FASTA_head():
     for seq_record in SeqIO.parse(REF_PATH + DNA_FILE + "X" + ".fa", "fasta"):
