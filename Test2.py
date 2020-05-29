@@ -29,16 +29,6 @@ FILE_NUM_LIST = ['X']
 # INITIAL_MAIN = [CHR_PATH, MAX_SEQ_LEN, WINDOW_SIZE]
 ############### end setting env ################
 
-def test():
-    logic_prep = LogicPrep.LogicPreps()
-
-    f_num = "1"
-
-    result_dict = logic_prep.make_dat_to_dict(REF_PATH + ANNO_FILE, f_num)
-
-    print(result_dict)
-
-
 def read_genbank():
     for seq_record in SeqIO.parse(TEST_CHR + genbank_file_name, "genbank"):
         print("id : " + seq_record.id)

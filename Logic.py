@@ -50,69 +50,26 @@ class Logics:
         else:
             return False
 
-    def get_Deep_PE_input(self, path, init_arr):
-        tmp_dict = {}
-
-        pam_seq = init_arr[0]
-        add_seq1_len = init_arr[1]
-        spacer_len = init_arr[2]
-        add_seq2_len = init_arr[3]
-        pam_len = len(pam_seq)
-
-        std_tot_len = add_seq1_len + spacer_len + pam_len + add_seq2_len
-        for seq_record in SeqIO.parse(path, "fasta"):
-
-            # print(seq_record)
-            trncrpt_id = seq_record.id
-            if trncrpt_id not in tmp_dict:
-                tmp_dict.update({trncrpt_id: [seq_record.description]})
-
-            tmp_p_str = ""
-            # cds_seq_len = len(seq_record)
-            for c in seq_record.seq:
-                tmp_p_str = tmp_p_str + c.upper()
-
-                if len(tmp_p_str) > std_tot_len:
-                    tmp_p_str = tmp_p_str[-std_tot_len:]
-
-                if len(tmp_p_str) == std_tot_len:
-                    if 'N' not in tmp_p_str:
-                        if self.match(0, tmp_p_str[-(add_seq2_len + pam_len):-add_seq2_len], pam_seq):
-                            tmp_dict[trncrpt_id].append(tmp_p_str)
-
-        return tmp_dict
-
     def filter_out_by_chrm(self, chrsm, ignore_chrm_list):
         for tmp_expt_str in ignore_chrm_list:
             if tmp_expt_str in chrsm:
                 return True
         return False
 
-    def group_by_chromosome(self, data_dict, deli_str, ignore_chrm_list):
+    def filter_out_by_AorC_rule(self, input_dict, window_idx_arr, rule_acgt_arr):
         result_dict = {}
-        aqia_dict = {}
-        for trnscrpt_id, vals_arr in data_dict.items():
-            dscript = vals_arr[0]
-            chrsm = dscript[dscript.index(deli_str) + len(deli_str):].split(":")[0]
-
-            if self.filter_out_by_chrm(chrsm, ignore_chrm_list):
-                continue
-
-            if 'AQIA' in chrsm:
-                if chrsm in aqia_dict:
-                    if trnscrpt_id not in aqia_dict[chrsm]:
-                        aqia_dict[chrsm].update({trnscrpt_id: vals_arr})
-                else:
-                    aqia_dict.update({chrsm: {trnscrpt_id: vals_arr}})
-                continue
+        for chr_key, val_dict in input_dict.items():
+            result_dict.update({chr_key: {}})
+            for trnscrpt_id, vals_arr in val_dict.items():
+                result_dict[chr_key].update({trnscrpt_id: [vals_arr[0]]})
+                for trgt_idx in range(1, len(vals_arr)):
+                    trgt_seq = vals_arr[trgt_idx][0][window_idx_arr[0] - 1: window_idx_arr[1]]
+                    for rule_acgt in rule_acgt_arr:
+                        if rule_acgt in trgt_seq:
+                            result_dict[chr_key][trnscrpt_id].append(vals_arr[trgt_idx])
+                            break
+        return result_dict
 
 
-            if chrsm in result_dict:
-                if trnscrpt_id not in result_dict[chrsm]:
-                    result_dict[chrsm].update({trnscrpt_id: vals_arr})
-            else:
-                result_dict.update({chrsm:{trnscrpt_id: vals_arr}})
-
-        return result_dict, aqia_dict
 
 
