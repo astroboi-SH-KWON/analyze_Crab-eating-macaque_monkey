@@ -43,16 +43,17 @@ INITIAL_CAS_OFF2 = ['NGG', gRNA_LEN, MAX_MISMATCH, 1, WORK_DIR + "CAS_OFF_FINDER
 
 ############### end setting env ################
 
-def get_target_seq_with_clvg_site():
-    logic = Logic.Logics()
-    logic_prep = LogicPrep.LogicPreps()
-    util = Util.Utils()
 
-    trgt_seq_dict = logic_prep.get_target_seq_with_clvg_site(REF_PATH + CDS_FILE, INIT_BE)
-    chr_dict, aqia_chr_dict = logic_prep.target_seq_with_clvg_site_group_by_chromosome(trgt_seq_dict, ":Macaca_fascicularis_5.0:", IGNORE_CHR_LIST)
+def test():
+    # full_description = "ENSCJAT00000068335.1 cds primary_assembly:ASM275486v1:NTIC01002224.1:100560660:100560977:-1 gene:ENSCJAG00000045448.1 gene_biotype:TR_V_gene transcript_biotype:TR_V_gene"
+    full_description = "ENSCJAT00000071555.1 cds primary_assembly:ASM275486v1:NTIC01002224.1:100539305:100539595:-1 gene:ENSCJAG00000040654.1 gene_biotype:TR_V_gene transcript_biotype:TR_V_gene gene_symbol:TRBV24-1 description:T cell receptor beta variable 24-1 [Source:HGNC Symbol;Acc:HGNC:12203]"
 
-    a_c_dict= logic.filter_out_by_AorC_rule(chr_dict, A_or_C_IDX, ACTG_RULE)
-    aqia_a_c_dict = logic.filter_out_by_AorC_rule(aqia_chr_dict, A_or_C_IDX, ACTG_RULE)
+    full_description_arr = full_description.split(" ")
+    idx = 0
+    for tmp_str in full_description_arr:
+        print(str(idx))
+        print(tmp_str)
+        idx += 1
 
 
 
@@ -67,8 +68,8 @@ def get_target_seq_with_clvg_site():
 
 start_time = clock()
 print("start >>>>>>>>>>>>>>>>>>")
-get_target_seq_with_clvg_site()
-# test2()
+# get_first_total_data()
+# test()
 print("::::::::::: %.2f seconds ::::::::::::::" % (clock() - start_time))
 
 

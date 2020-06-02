@@ -56,7 +56,7 @@ class Logics:
                 return True
         return False
 
-    def filter_out_by_AorC_rule(self, input_dict, window_idx_arr, rule_acgt_arr):
+    def filter_out_by_ACGTU_rule(self, input_dict, window_idx_arr, rule_acgt_arr):
         result_dict = {}
         for chr_key, val_dict in input_dict.items():
             result_dict.update({chr_key: {}})

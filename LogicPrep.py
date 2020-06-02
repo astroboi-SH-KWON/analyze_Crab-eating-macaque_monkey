@@ -144,4 +144,46 @@ class LogicPreps:
 
         return result_dict, aqia_dict
 
+    def get_deep_base_ed_score(self, path):
+        tmp_dict = {}
+        with open(path, "r") as f:
+            while True:
+                tmp_line = f.readline().replace("\n","")
+                if tmp_line == "":
+                    break
+
+                tmp_arr = tmp_line.split("\t")
+                tmp_dict.update({tmp_arr[0]: tmp_arr[-1]})
+
+        return tmp_dict
+
+    def get_cs9_scre(self, scre_txt_path):
+        tmp_tpl = ()
+        with open(scre_txt_path, "r") as f:
+            f.readline().replace("\n", "")
+            f.readline().replace("\n", "")
+            f.readline().replace("\n", "")
+            f.readline().replace("\n", "")
+            # make result as tuple
+            tmp_tpl += eval(f.readline().replace("\n", ""))
+        return tmp_tpl
+
+    def get_deep_cas9_tupl(self, path, scre_txt_path, seq_txt_path):
+        tmp_dict = {}
+        tmp_tpl = self.get_cs9_scre(path + scre_txt_path)
+
+        with open(path + seq_txt_path) as f:
+            f.readline().replace("\n", "")
+            idx = 0
+            while True:
+                tmp_line = f.readline().replace("\n", "")
+                if tmp_line == "":
+                    break
+
+                tmp_arr = tmp_line.split("\t")
+                tmp_dict.update({tmp_arr[1]: tmp_tpl[idx]})
+                idx += 1
+
+        return tmp_dict
+
 
