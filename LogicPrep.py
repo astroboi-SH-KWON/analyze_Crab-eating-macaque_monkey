@@ -237,13 +237,9 @@ class LogicPreps:
         return result_list
 
     # TODO
-    def sort_by_element_top_n(self, trgt_list, idx, max_num, result_list):
-        idx = 0
+    def sort_by_idx_element(self, trgt_list, idx, result_list):
         for tmp_list in sorted(trgt_list, key=lambda tmp_list: tmp_list[idx], reverse=True):
             result_list.append(tmp_list)
-            idx += 1
-            if idx >= max_num:
-                break
         return result_list
 
 
